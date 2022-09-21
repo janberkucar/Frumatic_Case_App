@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model Film {
+  id                String     @id @default(cuid())
+  createdAt         DateTime   @default(now())
+  adult             Boolean    @default(false)
+  backdrop_path     String?
+  budget            Int?
+  genres            Genre[]
+  imdb_id           String?
+  original_language String?
+  original_title    String?
+  overview          String?
+  popularity        Int        @unique
+  poster_path       String?
+  release_date      DateTime
+  runtime_days      Int?
+  revenue           Int?
+  spoken_languages  Language[]
+  status            String?
+  vote_count        Int?
+  vote_average      Int?
+  title             String     @unique
+}
+
+model Genre {
+  genre_id String  @id @default(cuid())
+  Film     Film?   @relation(fields: [filmId], references: [id])
+  filmId   String?
+  name     String
+}
+
+model Language {
+  language String  @id
+  Film     Film?   @relation(fields: [filmId], references: [id])
+  filmId   String?
+}
+
+model Account {
+  id            String  @id @default(cuid())
+  avatar        Avatar  @relation(fields: [avatarHash], references: [gravatarHash])
+  avatarHash    String
+  Name          Name?   @relation(fields: [nameFull_name], references: [full_name])
+  nameFull_name String?
+  adult         Boolean
+  username      String? @unique
+}
+
+model Avatar {
+  gravatar     Gravatar  @relation(fields: [gravatarHash], references: [hash])
+  gravatarHash String    @unique
+  Account      Account[]
+}
+
+model Gravatar {
+  hash   String   @id @unique @default(cuid())
+  Avatar Avatar[]
+}
+
+model Name {
+  full_name  String    @id
+  first_name String
+  last_name  String
+  Account    Account[]
+}

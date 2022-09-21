@@ -1,7 +1,9 @@
+import { GetServerSideProps } from "next";
 import type { NextPage } from "next";
 import Head from "next/head";
+import { prisma } from "../db/client";
 
-const Home: NextPage = () => {
+const Index: NextPage = (props: any) => {
   return (
     <div className="">
       <Head>
@@ -10,10 +12,31 @@ const Home: NextPage = () => {
       </Head>
       <main className="flex flex-col">
         <h1 className="self-center text-3xl font-bold ">Frumatic Case App </h1>
+        <div className="flex flex-col text-center w-100 overflow-auto">
+          <code>{props.films}</code>
+          <br />
+          <code>{props.account}</code>
+          <br />
+          <code>{props.genres}</code>
+        </div>
       </main>
       <footer className=""></footer>
     </div>
   );
 };
 
-export default Home;
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const filmData = await prisma.film.findMany();
+  const accountData = await prisma.account.findMany();
+  const genreData = await prisma.genre.findMany();
+
+  return {
+    props: {
+      films: JSON.stringify(filmData),
+      account: JSON.stringify(accountData),
+      genres: JSON.stringify(genreData),
+    },
+  };
+};
+
+export default Index;

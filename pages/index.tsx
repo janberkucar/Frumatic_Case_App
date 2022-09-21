@@ -2,8 +2,11 @@ import { GetServerSideProps } from "next";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { prisma } from "../db/client";
+import { trpc } from "../utils/trpc";
 
 const Index: NextPage = (props: any) => {
+  const { data, isLoading } = trpc.useQuery(["hi"]);
+  if (isLoading || !data) return <div>Loading...</div>;
   return (
     <div className="">
       <Head>
@@ -12,7 +15,8 @@ const Index: NextPage = (props: any) => {
       </Head>
       <main className="flex flex-col">
         <h1 className="self-center text-3xl font-bold ">Frumatic Case App </h1>
-        <div className="flex flex-col text-center w-100 overflow-auto">
+        <div className="flex flex-col text-center w-100 overflow-hidden">
+          <h1>{data?.greeting}</h1>
           <code>{props.films}</code>
           <br />
           <code>{props.account}</code>

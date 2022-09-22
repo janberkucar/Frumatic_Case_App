@@ -43,7 +43,7 @@ model Genre {
 }
 
 model Language {
-  language String  @id
+  language String  @id @db.VarChar(2)
   Film     Film?   @relation(fields: [filmId], references: [id])
   filmId   String?
 }

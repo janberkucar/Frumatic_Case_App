@@ -10,7 +10,7 @@ export function middleware(req: NextRequest, ev: NextFetchEvent) {
 
   const res = NextResponse.next();
 
-  res.cookie("app-token", random, { sameSite: "strict" });
+  // res.cookie("app-token", random, { sameSite: "strict" });
 
   return res;
 }

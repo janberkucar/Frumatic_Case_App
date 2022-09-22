@@ -35,8 +35,6 @@ export const accountsRouter = createRouter()
       return await prisma.account.create({
         data: {
           username: input.username,
-          name: {} as Name,
-          avatar: {} as Avatar,
           ownerToken: ctx.token,
         },
       });

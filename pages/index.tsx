@@ -3,11 +3,36 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { prisma } from "../db/client";
 import { trpc } from "../utils/trpc";
+import React from "react";
+
+const LanguageCreator: React.FC = () => {
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const client = trpc.useContext();
+  const { mutate, isLoading } = trpc.useMutation("languages.create", {
+    onSuccess: (data) => {
+      client.invalidateQueries(["languages.getAll"]);
+      if (!inputRef.current) return;
+      inputRef.current.value = "";
+    },
+  });
+  return (
+    <input
+      ref={inputRef}
+      disabled={isLoading}
+      onKeyDown={(event) => {
+        if (event.key === "Enter") {
+          mutate({ language: event.currentTarget.value });
+        }
+      }}
+    ></input>
+  );
+};
 
 const Index: NextPage = (props: any) => {
-  const films = trpc.useQuery(["films.getAll"]);
   const accounts = trpc.useQuery(["accounts.getAll"]);
+  const films = trpc.useQuery(["films.getAll"]);
   const genres = trpc.useQuery(["genres.getAll"]);
+  const languages = trpc.useQuery(["languages.getAll"]);
 
   if (films.isLoading || accounts.isLoading || !films || !accounts)
     return <div>Loading...</div>;
@@ -39,7 +64,6 @@ const Index: NextPage = (props: any) => {
           ))}
           <code>{props.films}</code>
           <br />
-
           {/* Accounts */}
           {accounts.data?.accounts.map((account: any) => (
             <div key={account?.id} className="w-1/2 flex m-4">
@@ -53,7 +77,6 @@ const Index: NextPage = (props: any) => {
           ))}
           <code>{props.account}</code>
           <br />
-
           {/* Genres */}
           {genres.data?.genres.map((genre: any) => (
             <div key={genre?.genre_id} className="w-1/2 flex m-4">
@@ -65,6 +88,17 @@ const Index: NextPage = (props: any) => {
             </div>
           ))}
           <code>{props.genres}</code>
+          {/* Languages */}
+          <LanguageCreator />{" "}
+          {languages.data?.languages.map((language: any) => (
+            <div key={language?.filmId} className="w-1/2 flex m-4">
+              <a href="">
+                <h3>FilmId: {language?.filmId}</h3>
+                <h3>Language: {language?.language}</h3>
+              </a>
+            </div>
+          ))}
+          <code>{props.languages}</code>
         </div>
       </main>
       <footer className=""></footer>
@@ -73,15 +107,17 @@ const Index: NextPage = (props: any) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const filmData = await prisma.film.findMany();
   const accountData = await prisma.account.findMany();
+  const filmData = await prisma.film.findMany();
   const genreData = await prisma.genre.findMany();
+  const languageData = await prisma.language.findMany();
 
   return {
     props: {
-      films: JSON.stringify(filmData),
       account: JSON.stringify(accountData),
+      films: JSON.stringify(filmData),
       genres: JSON.stringify(genreData),
+      languages: JSON.stringify(languageData),
     },
   };
 };

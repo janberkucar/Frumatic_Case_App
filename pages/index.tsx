@@ -1,7 +1,16 @@
+import { GetServerSideProps } from "next";
 import type { NextPage } from "next";
 import Head from "next/head";
+import { prisma } from "../db/client";
+import { trpc } from "../utils/trpc";
 
-const Home: NextPage = () => {
+const Index: NextPage = (props: any) => {
+  const films = trpc.useQuery(["films.getAll"]);
+  const accounts = trpc.useQuery(["accounts.getAll"]);
+  const genres = trpc.useQuery(["genres.getAll"]);
+
+  if (films.isLoading || accounts.isLoading || !films || !accounts)
+    return <div>Loading...</div>;
   return (
     <div className="">
       <Head>
@@ -10,10 +19,71 @@ const Home: NextPage = () => {
       </Head>
       <main className="flex flex-col">
         <h1 className="self-center text-3xl font-bold ">Frumatic Case App </h1>
+        <div className="flex flex-col w-100 overflow-hidden items-center">
+          {/* Films */}
+          {films.data?.films.map((film: any) => (
+            <div key={film?.id} className="w-1/2 flex m-4">
+              <a href="">
+                <h3>Title: {film?.title}</h3>
+                <h3>Overview: {film?.overview}</h3>
+
+                <h3>Popularity: {film?.popularity}</h3>
+                <h3>Vote Average: {film?.vote_average}</h3>
+                <h3>Vote Count: {film?.vote_count}</h3>
+                <h3>Budget: {film?.budget}</h3>
+
+                <h3>Release Date: {film?.release_date.toLocaleDateString()}</h3>
+                <h3>Created At: {film?.createdAt.toLocaleDateString()}</h3>
+              </a>
+            </div>
+          ))}
+          <code>{props.films}</code>
+          <br />
+
+          {/* Accounts */}
+          {accounts.data?.accounts.map((account: any) => (
+            <div key={account?.id} className="w-1/2 flex m-4">
+              <a href="">
+                <h3>Adult: {account?.adult.toString()}</h3>
+                <h3>Avatar Hash: {account?.avatarHash}</h3>
+                <h3>Full Name : {account?.nameFull_name}</h3>
+                <h3>User Name : {account?.username}</h3>
+              </a>
+            </div>
+          ))}
+          <code>{props.account}</code>
+          <br />
+
+          {/* Genres */}
+          {genres.data?.genres.map((genre: any) => (
+            <div key={genre?.genre_id} className="w-1/2 flex m-4">
+              <a href="">
+                <h3>FilmId: {genre?.filmId}</h3>
+                <h3>Genre Id: {genre?.genre_id}</h3>
+                <h3>Name : {genre?.name}</h3>
+              </a>
+            </div>
+          ))}
+          <code>{props.genres}</code>
+        </div>
       </main>
       <footer className=""></footer>
     </div>
   );
 };
 
-export default Home;
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const filmData = await prisma.film.findMany();
+  const accountData = await prisma.account.findMany();
+  const genreData = await prisma.genre.findMany();
+
+  return {
+    props: {
+      films: JSON.stringify(filmData),
+      account: JSON.stringify(accountData),
+      genres: JSON.stringify(genreData),
+    },
+  };
+};
+
+export default Index;

@@ -13,6 +13,16 @@ export const languagesRouter = trpc
       };
     },
   })
+  .query("getById", {
+    input: z.object({ id: z.string() }),
+    async resolve({ input }) {
+      return await prisma.language.findFirst({
+        where: {
+          filmId: input.id,
+        },
+      });
+    },
+  })
   .mutation("create", {
     input: z.object({
       language: z.string().min(2).max(2),

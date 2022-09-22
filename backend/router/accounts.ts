@@ -25,20 +25,6 @@ export const accountsRouter = createRouter()
       });
       return { account, isOwner: account?.ownerToken === ctx.token };
     },
-  })
-  .mutation("create", {
-    input: z.object({
-      username: z.string().min(5).max(20),
-    }),
-    async resolve({ input, ctx }) {
-      if (!ctx.token) return { error: "Unauthorized" };
-      return await prisma.account.create({
-        data: {
-          username: input.username,
-          ownerToken: ctx.token,
-        },
-      });
-    },
   });
 
 // export type definition of API

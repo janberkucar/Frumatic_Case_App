@@ -6,29 +6,6 @@ import { trpc } from "../utils/trpc";
 import React from "react";
 import Link from "next/link";
 
-const AccountCreator: React.FC = () => {
-  const inputRef = React.useRef<HTMLInputElement>(null);
-  const client = trpc.useContext();
-  const { mutate, isLoading } = trpc.useMutation("accounts.create", {
-    onSuccess: (data) => {
-      client.invalidateQueries(["accounts.getAll"]);
-      if (!inputRef.current) return;
-      inputRef.current.value = "";
-    },
-  });
-  return (
-    <input
-      ref={inputRef}
-      disabled={isLoading}
-      onKeyDown={(event) => {
-        if (event.key === "Enter") {
-          mutate({ username: event.currentTarget.value });
-        }
-      }}
-    ></input>
-  );
-};
-
 const LanguageCreator: React.FC = () => {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const client = trpc.useContext();
@@ -93,7 +70,6 @@ const Index: NextPage = (props: any) => {
           <code>{props.films}</code>
           <br />
           {/* Accounts */}
-          <AccountCreator />{" "}
           {accounts.data?.accounts.map((account: any) => (
             <div key={account?.id} className="w-1/2 flex m-4">
               <Link href={`account//${account?.id}`}>

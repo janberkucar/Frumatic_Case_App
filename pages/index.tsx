@@ -4,6 +4,30 @@ import Head from "next/head";
 import { prisma } from "../db/client";
 import { trpc } from "../utils/trpc";
 import React from "react";
+import Link from "next/link";
+
+const AccountCreator: React.FC = () => {
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const client = trpc.useContext();
+  const { mutate, isLoading } = trpc.useMutation("accounts.create", {
+    onSuccess: (data) => {
+      client.invalidateQueries(["accounts.getAll"]);
+      if (!inputRef.current) return;
+      inputRef.current.value = "";
+    },
+  });
+  return (
+    <input
+      ref={inputRef}
+      disabled={isLoading}
+      onKeyDown={(event) => {
+        if (event.key === "Enter") {
+          mutate({ username: event.currentTarget.value });
+        }
+      }}
+    ></input>
+  );
+};
 
 const LanguageCreator: React.FC = () => {
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -48,31 +72,38 @@ const Index: NextPage = (props: any) => {
           {/* Films */}
           {films.data?.films.map((film: any) => (
             <div key={film?.id} className="w-1/2 flex m-4">
-              <a href="">
-                <h3>Title: {film?.title}</h3>
-                <h3>Overview: {film?.overview}</h3>
+              <Link href={`film//${film?.id}`}>
+                <a>
+                  <h3>Title: {film?.title}</h3>
+                  <h3>Overview: {film?.overview}</h3>
 
-                <h3>Popularity: {film?.popularity}</h3>
-                <h3>Vote Average: {film?.vote_average}</h3>
-                <h3>Vote Count: {film?.vote_count}</h3>
-                <h3>Budget: {film?.budget}</h3>
+                  <h3>Popularity: {film?.popularity}</h3>
+                  <h3>Vote Average: {film?.vote_average}</h3>
+                  <h3>Vote Count: {film?.vote_count}</h3>
+                  <h3>Budget: {film?.budget}</h3>
 
-                <h3>Release Date: {film?.release_date.toLocaleDateString()}</h3>
-                <h3>Created At: {film?.createdAt.toLocaleDateString()}</h3>
-              </a>
+                  <h3>
+                    Release Date: {film?.release_date.toLocaleDateString()}
+                  </h3>
+                  <h3>Created At: {film?.createdAt.toLocaleDateString()}</h3>
+                </a>
+              </Link>
             </div>
           ))}
           <code>{props.films}</code>
           <br />
           {/* Accounts */}
+          <AccountCreator />{" "}
           {accounts.data?.accounts.map((account: any) => (
             <div key={account?.id} className="w-1/2 flex m-4">
-              <a href="">
-                <h3>Adult: {account?.adult.toString()}</h3>
-                <h3>Avatar Hash: {account?.avatarHash}</h3>
-                <h3>Full Name : {account?.nameFull_name}</h3>
-                <h3>User Name : {account?.username}</h3>
-              </a>
+              <Link href={`account//${account?.id}`}>
+                <a>
+                  <h3>Adult: {account?.adult.toString()}</h3>
+                  <h3>Avatar Hash: {account?.avatarHash}</h3>
+                  <h3>Full Name : {account?.nameFull_name}</h3>
+                  <h3>User Name : {account?.username}</h3>
+                </a>
+              </Link>
             </div>
           ))}
           <code>{props.account}</code>
@@ -80,11 +111,13 @@ const Index: NextPage = (props: any) => {
           {/* Genres */}
           {genres.data?.genres.map((genre: any) => (
             <div key={genre?.genre_id} className="w-1/2 flex m-4">
-              <a href="">
-                <h3>FilmId: {genre?.filmId}</h3>
-                <h3>Genre Id: {genre?.genre_id}</h3>
-                <h3>Name : {genre?.name}</h3>
-              </a>
+              <Link href={`genre//${genre?.genre_id}`}>
+                <a>
+                  <h3>FilmId: {genre?.filmId}</h3>
+                  <h3>Genre Id: {genre?.genre_id}</h3>
+                  <h3>Name : {genre?.name}</h3>
+                </a>
+              </Link>
             </div>
           ))}
           <code>{props.genres}</code>
@@ -92,10 +125,12 @@ const Index: NextPage = (props: any) => {
           <LanguageCreator />{" "}
           {languages.data?.languages.map((language: any) => (
             <div key={language?.filmId} className="w-1/2 flex m-4">
-              <a href="">
-                <h3>FilmId: {language?.filmId}</h3>
-                <h3>Language: {language?.language}</h3>
-              </a>
+              <Link href={`language//${language?.filmId}`}>
+                <a>
+                  <h3>FilmId: {language?.filmId}</h3>
+                  <h3>Language: {language?.language}</h3>
+                </a>
+              </Link>
             </div>
           ))}
           <code>{props.languages}</code>

@@ -4,9 +4,9 @@ import { accountsRouter } from "./accounts";
 import { filmsRouter } from "./films";
 import { genresRouter } from "./genres";
 import { languagesRouter } from "./languages";
+import { createRouter } from "./context";
 
-export const appRouter = trpc
-  .router()
+export const appRouter = createRouter()
   .transformer(superjson)
   .merge("accounts.", accountsRouter)
   .merge("films.", filmsRouter)

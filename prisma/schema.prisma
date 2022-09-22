@@ -50,12 +50,15 @@ model Language {
 
 model Account {
   id            String  @id @default(cuid())
+  ownerToken    String  @db.VarChar(255)
   avatar        Avatar  @relation(fields: [avatarHash], references: [gravatarHash])
   avatarHash    String
   Name          Name?   @relation(fields: [nameFull_name], references: [full_name])
   nameFull_name String?
   adult         Boolean
   username      String? @unique
+
+  @@index([ownerToken])
 }
 
 model Avatar {

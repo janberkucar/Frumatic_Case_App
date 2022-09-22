@@ -5,11 +5,12 @@ import { prisma } from "../db/client";
 import { trpc } from "../utils/trpc";
 
 const Index: NextPage = (props: any) => {
-  const { data, isLoading } = trpc.useQuery(["getAllFilms"]);
+  const films = trpc.useQuery(["films.getAll"]);
+  const accounts = trpc.useQuery(["accounts.getAll"]);
+  const genres = trpc.useQuery(["genres.getAll"]);
 
-  console.log(data);
-
-  if (isLoading || !data) return <div>Loading...</div>;
+  if (films.isLoading || accounts.isLoading || !films || !accounts)
+    return <div>Loading...</div>;
   return (
     <div className="">
       <Head>
@@ -19,9 +20,8 @@ const Index: NextPage = (props: any) => {
       <main className="flex flex-col">
         <h1 className="self-center text-3xl font-bold ">Frumatic Case App </h1>
         <div className="flex flex-col w-100 overflow-hidden items-center">
-          {/* <h1>{data?.greeting}</h1> */}
-          <code>{props.films}</code>
-          {data?.films.map((film) => (
+          {/* Films */}
+          {films.data?.films.map((film: any) => (
             <div key={film?.id} className="w-1/2 flex m-4">
               <a href="">
                 <h3>Title: {film?.title}</h3>
@@ -37,12 +37,34 @@ const Index: NextPage = (props: any) => {
               </a>
             </div>
           ))}
+          <code>{props.films}</code>
           <br />
+
+          {/* Accounts */}
+          {accounts.data?.accounts.map((account: any) => (
+            <div key={account?.id} className="w-1/2 flex m-4">
+              <a href="">
+                <h3>Adult: {account?.adult.toString()}</h3>
+                <h3>Avatar Hash: {account?.avatarHash}</h3>
+                <h3>Full Name : {account?.nameFull_name}</h3>
+                <h3>User Name : {account?.username}</h3>
+              </a>
+            </div>
+          ))}
           <code>{props.account}</code>
-          {/* <code>{account}</code> */}
           <br />
+
+          {/* Genres */}
+          {genres.data?.genres.map((genre: any) => (
+            <div key={genre?.genre_id} className="w-1/2 flex m-4">
+              <a href="">
+                <h3>FilmId: {genre?.filmId}</h3>
+                <h3>Genre Id: {genre?.genre_id}</h3>
+                <h3>Name : {genre?.name}</h3>
+              </a>
+            </div>
+          ))}
           <code>{props.genres}</code>
-          {/* <code>{genres}</code> */}
         </div>
       </main>
       <footer className=""></footer>

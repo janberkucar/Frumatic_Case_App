@@ -5,7 +5,10 @@ import { prisma } from "../db/client";
 import { trpc } from "../utils/trpc";
 
 const Index: NextPage = (props: any) => {
-  const { data, isLoading } = trpc.useQuery(["hi"]);
+  const { data, isLoading } = trpc.useQuery(["getAllFilms"]);
+
+  console.log(data);
+
   if (isLoading || !data) return <div>Loading...</div>;
   return (
     <div className="">
@@ -15,13 +18,31 @@ const Index: NextPage = (props: any) => {
       </Head>
       <main className="flex flex-col">
         <h1 className="self-center text-3xl font-bold ">Frumatic Case App </h1>
-        <div className="flex flex-col text-center w-100 overflow-hidden">
-          <h1>{data?.greeting}</h1>
+        <div className="flex flex-col w-100 overflow-hidden items-center">
+          {/* <h1>{data?.greeting}</h1> */}
           <code>{props.films}</code>
+          {data?.films.map((film) => (
+            <div key={film?.id} className="w-1/2 flex m-4">
+              <a href="">
+                <h3>Title: {film?.title}</h3>
+                <h3>Overview: {film?.overview}</h3>
+
+                <h3>Popularity: {film?.popularity}</h3>
+                <h3>Vote Average: {film?.vote_average}</h3>
+                <h3>Vote Count: {film?.vote_count}</h3>
+                <h3>Budget: {film?.budget}</h3>
+
+                <h3>Release Date: {film?.release_date.toLocaleDateString()}</h3>
+                <h3>Created At: {film?.createdAt.toLocaleDateString()}</h3>
+              </a>
+            </div>
+          ))}
           <br />
           <code>{props.account}</code>
+          {/* <code>{account}</code> */}
           <br />
           <code>{props.genres}</code>
+          {/* <code>{genres}</code> */}
         </div>
       </main>
       <footer className=""></footer>

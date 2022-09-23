@@ -1,4 +1,4 @@
-import Account from "./Accouint";
+import Account from "./Account";
 import Gravatar from "./Gravatar";
 
 export default interface Avatar {

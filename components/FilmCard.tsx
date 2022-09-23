@@ -1,8 +1,9 @@
+import { NextPage } from "next";
 import Link from "next/link";
 import React from "react";
-import Film from "../utils/interfaces/Film";
+import { Film } from "../utils/interfaces/index";
 
-const FilmCard = (film: Film) => {
+const FilmCard: NextPage<{ film: Film }> = ({ film }) => {
   return (
     <div key={film?.id} className="">
       <Link href={`film//${film?.id}`}>

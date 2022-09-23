@@ -6,6 +6,7 @@ import { trpc } from "../utils/trpc";
 import React from "react";
 import Link from "next/link";
 import { FilmCard, FilmWidget, Genres } from "../components";
+import { Film } from "../utils/interfaces";
 
 const LanguageCreator: React.FC = () => {
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -47,9 +48,9 @@ const Index: NextPage = (props: any) => {
       <main className="flex flex-col">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           <div className="lg:col-span-6 col-span-1">
-            {films.data?.films.map((film: any) => (
-              <FilmCard></FilmCard>
-            ))}
+            {films.data?.films.map((film: Film) => {
+              return <FilmCard key={film?.id} film={film}></FilmCard>;
+            })}
           </div>
         </div>
         <div className="lg:col-span-4 col-span-1">

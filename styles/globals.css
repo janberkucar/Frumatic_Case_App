@@ -1,10 +1,25 @@
+/* ------------------------------------------ */
 /* ! (@Janberk): Tailwind import. */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* ------------------------------------------ */
 /* Clears vertical rhythm. */
 html,
 body {
   padding: 0;
   margin: 0;
 }
+/* ------------------------------------------ */
+/* * NOTE(@Janberk): Additional Carousel CSS. */
+.text-shadow {
+  text-shadow: 0px 2px 0px rgb(0 0 0 / 30%);
+}
+.react-multi-carousel-list .arrow-btn {
+  transition: width 300ms ease;
+  width: 50px;
+}
+.react-multi-carousel-list .arrow-btn:hover {
+  width: 60px;
+}
+/* ------------------------------------------ */

@@ -3,7 +3,7 @@ import Language from "./Language";
 
 export default interface Film {
   id: string;
-  createdAt?: Date;
+  createdAt: Date;
   adult?: boolean;
   backdrop_path?: string;
   budget?: number;
@@ -14,7 +14,7 @@ export default interface Film {
   overview?: string;
   popularity?: number;
   poster_path?: string;
-  release_date?: Date;
+  release_date: Date;
   runtime_days?: number;
   revenue?: number;
   spoken_languages?: Language[];

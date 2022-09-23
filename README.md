@@ -1,6 +1,42 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Frumatic Case App
+[![Development Status: Active.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+![Stars](https://img.shields.io/github/stars/janberkucar/Frumatic_Case_App?label=%E2%AD%90%20Stars)
+![Contributors](https://img.shields.io/github/contributors/janberkucar/Frumatic_Case_App??color=red)
 
-## Getting Started
+Film Database Web Applicaton for Frumatic Hiring Process
+- Decoupled Architecture in Next.js
+- Backend in tRPC and Prisma scaled with PlanetScale.
+
+<br>
+
+# Tech Stack
+  - Next.js
+  - PlanetScale
+  - Prisma
+  - Tailwind
+  - Vercel
+  - tRPC
+
+<br>
+
+# Why use Planetscale and Prisma
+  - Competitors and their drawbacks.
+  - Ease for use with TMBD but not dependent.
+  - Customization Options.
+<br>
+
+# Installation
+
+## [Backend](https://github.com/CanberkUcar/Ustad_WEB/tree/master/backend)
+
+```bash
+pscale connect frumatic-case-app --port 3309
+```
+
+
+<br>
+
+## [Frontend](https://github.com/CanberkUcar/Ustad_WEB/tree/master/frontend)
 
 First, run the development server:
 
@@ -12,11 +48,36 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### Evironment vars. 
+Create a `.env` file taking reference from `.env-example` inside frontend directory and add your WordPress Site URL ( for local development put `http://localhost:8020`)
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+<br>
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+# Docker Commands
+```shell script
+docker ps // See all the running containers
+docker ps --all // List all containers #depricated
+docker container ls -a // List down all containers 
+docker rm your-container-id // Remove the container
+docker container restart your-container-id
+
+// Stoping containers
+docker-compose down // Stops and removes all the docker containers
+
+// Restart container
+docker-compose up -d // Will check for any update in the docker.yml file and update only the container which are changed.
+
+docker rm -f $your-container-id // Forcefully removes the running container with that container id.
+
+// Get list of all images
+docker ls
+// Selected all images id
+Ctr + Option and selected all image ids
+// Delete docker images
+docker rmi 8f1781b41c89
+docker rmi 420b971d0f8b
+```
+<br>
 
 ## Learn More
 

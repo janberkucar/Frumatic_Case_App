@@ -48,7 +48,7 @@ const Index: NextPage = (props: any) => {
       <main className="flex flex-col">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           <div className="lg:col-span-6 col-span-1">
-            {films.data?.films.map((film: Film) => {
+            {films.data?.films.map((film: any) => {
               return <FilmCard key={film?.id} film={film}></FilmCard>;
             })}
           </div>

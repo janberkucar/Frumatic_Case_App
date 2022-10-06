@@ -4,7 +4,7 @@
 ![Contributors](https://img.shields.io/github/contributors/janberkucar/Frumatic_Case_App??color=red)
 
 Film Database Web Applicaton for Frumatic Hiring Process
-- Decoupled Architecture in Next.js
+- De-coupled Architecture in Next.js
 - Backend in tRPC and Prisma scaled with PlanetScale.
 
 https://frumatic-case-ennit2ib3-janberkucar.vercel.app/
